@@ -1,21 +1,17 @@
 {
   "$schema": "https://raw.githubusercontent.com/ALCops/rulebook-engine/v1/schemas/rulebook-settings.schema.json",
   "templateUrl": "https://github.com/ALCops/rulebook@main",
-  "templateSha": "",
+  "templateSha": "54c4251bea48bfca0859eed668e95224a06a7c5b",
   "baseUrl": "",
   "publish": { "target": "pages" },
   "twins": "both",
-  "quarantine": { "stages": null, "prereleaseStages": null },
+  "quarantine": { "stages": ["default"], "prereleaseStages": ["default"] },
   "levels": [
-    { "name": "Essential", "description": "Cannot ship without: runtime failures, the deployment blockers of both Microsoft cops, compiler future errors, PlatformCop." },
-    { "name": "Recommended", "basedOn": "Essential", "description": "Every default-on rule at its author severity; marketplace checks join here." },
-    { "name": "Strict", "basedOn": "Recommended", "description": "Recommended with advisory rules promoted to Warning." },
-    { "name": "Complete", "basedOn": "Strict", "description": "Strict plus every opt-in rule." }
+    { "name": "Developer", "description": "Analyzer defaults. Opt in: Change Rule overrides or entries in base/developer.ruleset.json." },
+    { "name": "Pipeline", "description": "Analyzer defaults for pipeline builds. Opt in: Change Rule overrides or entries in base/pipeline.ruleset.json." }
   ],
   "stages": [
-    { "name": "default", "description": "Editor and any consumer without its own stage. The level result as is." },
-    { "name": "CI", "description": "Pull request and release builds. Postponable diagnostics relaxed to Info." },
-    { "name": "vNext", "description": "Builds against the next platform. Future errors at Error, obsolete-pending at Warning." }
+    { "name": "default", "description": "The only stage: editor and pipelines alike. The level result as is." }
   ],
   "ghTokenWorkflowSecretName": "GHTOKENWORKFLOW",
   "commitOptions": { "createPullRequest": true, "pullRequestLabels": ["rulebook"] },
@@ -23,5 +19,12 @@
   "docs": { "updateMode": "skip" },
   "update": { "schedule": null },
   "scan": { "schedule": "17 4 * * *" },
-  "unusedRulebookFiles": []
+  "unusedRulebookFiles": [
+    "base/essential.ruleset.json",
+    "base/recommended.ruleset.json",
+    "base/strict.ruleset.json",
+    "base/complete.ruleset.json",
+    "stages/ci.json",
+    "stages/vnext.json"
+  ]
 }
