@@ -1,0 +1,90 @@
+# Hosting your endpoints
+
+Your AL projects fetch their rules from URLs. This page explains where those URLs come from: the Publish workflow puts your endpoints, the skeletons, `rulebook.json`, the catalog and the dashboard site (or a plain index page) on GitHub Pages and then checks that every URL serves what you committed.
+
+> **Status:** written 2026-10-06 with the Publish work package of the engine ([WP05, #7](https://github.com/ALCops/rulebook-engine/issues/7)). GitHub Pages is the only host available in version 1. The contributor reference, with the preflight messages and the live test run, is the engine's [publish-targets.md](https://github.com/ALCops/rulebook-engine/blob/v1/docs/reference/publish-targets.md).
+
+## Contents
+
+1. [What gets published](#1-what-gets-published)
+2. [GitHub Pages](#2-github-pages)
+3. [Troubleshooting](#3-troubleshooting)
+4. [Other hosts](#4-other-hosts)
+
+## 1. What gets published
+
+| URL | Content |
+|---|---|
+| `<baseUrl>/` | With `site.enabled` set to `true` (shipped): the dashboard's landing page, with the grid of each stage at `<baseUrl>/stages/<stage>/` ([dashboard.md](dashboard.md)). With `false`: an index page, how to set up an AL project with the init script, then one table per stage, one row per level, with the endpoint URL, the number of rules it lists and a download link for the skeleton. |
+| `<baseUrl>/setup/`, `<baseUrl>/stages/<stage>/`, `<baseUrl>/levels/<level>/`, `<baseUrl>/rules/<id>/` | The other pages of the dashboard, only with `site.enabled` set to `true`: the setup page with the content of the index page above, a grid per stage, a page per level and per rule ([dashboard.md](dashboard.md) section 1). The site's styles and scripts are under `css/` and `js/`. |
+| `<baseUrl>/rulebook.json` | Your rulebook, machine-readable: the levels and stages, which the init script reads ([al-project.md](al-project.md)), and every rule with its action on every endpoint and the input that decides it, the data of the dashboard ([dashboard.md](dashboard.md) section 6). |
+| `<baseUrl>/catalog/diagnostics.json` | Your `catalog/diagnostics.json`, byte for byte. |
+| `<baseUrl>/rulesets/<level>.ruleset.json` and `<baseUrl>/rulesets/<level>.<stage>.ruleset.json` | The endpoints, exactly as committed in `rulesets/`. The `default` stage has no suffix. |
+| `<baseUrl>/skeletons/<level>.<stage>.ruleset.json` | The skeletons, with your `baseUrl` filled in. The copies in your repository keep the placeholder `{BASEURL}`. |
+
+Nothing else is published as a file: not your level and stage files, `overrides.json`, the quarantine files or the settings. Their content shows up only where the dashboard and `rulebook.json` describe it: the entries and justifications of the level and stage files, the overrides and the quarantine ids, and the justification text of overrides and quarantine entries only with `site.includeJustifications` set to `true` ([dashboard.md](dashboard.md) section 4). A level or stage you remove from the settings disappears from the site on the next run.
+
+Publish never changes your repository. It publishes what is committed, and it stops when `rulesets/` is out of date instead of regenerating it. Endpoints only change through a pull request, where the Validate workflow shows the effective change per endpoint.
+
+## 2. GitHub Pages
+
+### Before you start
+
+- **Public repository on GitHub Free.** On the Free plan GitHub Pages works for public repositories only. A private repository can serve a public site on GitHub Pro, Team or Enterprise Cloud. The site itself must be public either way: the AL compiler fetches the endpoints without signing in (see "Private sites" below).
+- **Pages creation allowed.** In an organization, an owner must allow *Pages creation > Public* under Organization settings > Member privileges. While it is off, nobody can create a site, owners included.
+- **Private sites (Enterprise Cloud).** A private or internal repository of an Enterprise Cloud organization can publish its site privately: it is then served from a random `https://<name>.pages.github.io` address, only to people who are signed in and can read the repository. The AL compiler fetches the endpoints without signing in, so it cannot use a private site; the dashboard still works for your colleagues. The **GitHub Pages visibility** dropdown under Settings > Pages shows which one you have; switch it to **Public**. With Enterprise Managed Users the dropdown is absent and the site is private (observed on 2026-10-21), and the endpoints need another host ([rulebook-engine#56](https://github.com/ALCops/rulebook-engine/issues/56), section 4). On a private site Publish ends green with a warning and skips the check after the deploy.
+
+### One-time setup
+
+1. **Turn on Pages.** In your rulebook repository, open Settings > Pages and set Build and deployment > Source to **GitHub Actions**. Someone with admin rights on the repository does this once. The Publish workflow never creates the site itself.
+2. **`baseUrl` (optional).** Publish takes the address of the Pages site: with `baseUrl` in `.github/Rulebook-Settings.json` empty, as the template ships it, it asks GitHub for the address of the site before it deploys and names it in the run summary ("Base URL from the Pages site"). Set `baseUrl` only to override it, for example before a custom domain is live, all lowercase and without a trailing slash:
+   - `https://<owner>.github.io/<repository>`, for example `https://contoso.github.io/rulebook`;
+   - `https://<owner>.github.io` if the repository is named `<owner>.github.io`;
+   - your custom domain (below).
+3. **Run Publish.** The Publish workflow runs on every push to `main` that changes `rulesets/`, `skeletons/`, `site/`, `catalog/diagnostics.json`, the settings or the workflow itself, and you can run it by hand under Actions > Publish. On these pages `<baseUrl>` stands for the address of the site, the one in `baseUrl` or the one Publish took from GitHub. After the first run, `<baseUrl>/` opens the dashboard (or the index page when `site.enabled` is `false`). To confirm the site works, open `<baseUrl>/`, `<baseUrl>/rulebook.json` and one endpoint such as `<baseUrl>/rulesets/strict.ruleset.json`: on a public site all three must open without a redirect (a private site shows the GitHub sign-in page first, see "Private sites" above).
+
+Then set up your AL projects: the setup page of your site (`<baseUrl>/setup/`, or `<baseUrl>/` when the dashboard is off) shows the two commands of the init script, which downloads the skeletons of a level into `.rulebook/`, one file per stage. See [al-project.md](al-project.md).
+
+### Custom domain
+
+Set the domain under Settings > Pages > Custom domain and add the DNS records GitHub shows there. With `baseUrl` empty, GitHub reports the custom domain as the address of the site, so the next Publish run uses it by itself. With `baseUrl` set, change it to `https://<your domain>` (or empty it) in a pull request. Until you do, Publish warns that the site is served at another address than `baseUrl`, and the check after the deploy fails right away with a message that the URL answers with a redirect: the old `github.io` address now redirects to your domain, and the AL compiler does not follow redirects. Compile one project against the new address before you roll it out; custom domains have not been tested with the compiler's network checks yet.
+
+Renaming the repository or the owner changes the `github.io` address the same way: publish again, after updating `baseUrl` if you set it.
+
+### How fast changes arrive
+
+Publish waits until every URL serves the new file, for up to 11 minutes. In practice GitHub Pages served a changed or removed endpoint within seconds of the deploy. Pages tells clients they may cache a file for 10 minutes, so a proxy or tool that caches can show the old rules for up to that long. VS Code reads the ruleset again after **Developer: Reload Window** or a change to `app.json`.
+
+### If the repository goes private
+
+On GitHub Free a public repository that is made private loses its Pages site after about ten minutes. From then on every AL project that uses your endpoints fails to compile (AL1033). Making the repository public again does not bring the site back: turn on Pages again (step 1) and run Publish.
+
+## 3. Troubleshooting
+
+Publish checks before it deploys and after it deploys. Its message says what to change; the first column is the start of the message.
+
+| Message | Cause | Fix |
+|---|---|---|
+| `baseUrl is empty` | `baseUrl` is not set in a run with `deploy: false`, which does not ask GitHub for the address of the site. | Set `baseUrl` as in step 2 (the message proposes the value for your repository), or run with `deploy: true`. |
+| `The address of the Pages site, ..., cannot be the base URL` | The site has a custom domain without HTTPS, so GitHub reports an `http://` address, and `baseUrl` is empty. | Turn on Enforce HTTPS under Settings > Pages, or set `baseUrl` as in step 2. |
+| `The Pages site answered without an address` | GitHub returned the Pages site without its address, and `baseUrl` is empty. | Set `baseUrl` as in step 2; the message proposes the value for your repository. |
+| Warning: `The Pages site is published privately at ...` | The site is private: only signed-in people who can read the repository see it, so the AL compiler cannot fetch the endpoints. Publish ends green and checks no URL. | Switch GitHub Pages visibility to **Public** under Settings > Pages; with Enterprise Managed Users that is not possible, see "Private sites" in section 2. |
+| Warning: `The Pages site is served at ..., but baseUrl is ...` | `baseUrl` is set to another address than the one GitHub serves the site at, for example after a custom domain was added. | Set `baseUrl` to that address, or empty it so Publish takes it from GitHub. |
+| `GitHub Pages is not enabled for this repository` | Step 1 was not done, or the plan or the organization does not allow Pages here, or the workflow lost `pages: write`. | Step 1. On GitHub Free, also check that the repository is public and that Pages creation is allowed. If Pages is already on, check that the Publish workflow still grants `pages: write`. |
+| `The GitHub Pages site of this repository builds from a branch` | The Pages source is a branch, not GitHub Actions. | Settings > Pages > Source: **GitHub Actions**. |
+| `The plan of this account does not support GitHub Pages for a private repository` | A private repository on GitHub Free. | Make the repository public or upgrade the plan. |
+| `An organization administrator has disabled Pages creation` | The organization policy forbids new Pages sites. | Ask an organization owner to allow Pages creation (Public). |
+| `The committed endpoints do not match their inputs` | `rulesets/` is out of date. | Open a pull request that regenerates it; the Validate workflow names the files. |
+| `Publish target '...' is not implemented yet` | `publish.target` names a planned target. | Set `publish.target` to `pages` (section 4). |
+| Failure `site`, or a warning about `site/hugo.yaml` or the matrix marker | The dashboard site could not be built, or is built from changed files. | [dashboard.md](dashboard.md) section 7. |
+| `... is missing`, `... serves a different body`, `... answers with a redirect` | After the deploy, a URL did not serve the committed file. | Check `baseUrl` (a redirect means it is not the final address; or leave it empty so Publish takes the address of the Pages site), then run Publish again. |
+
+## 4. Other hosts
+
+The settings already accept three more `publish.target` values. They are planned, not available: Publish fails with a link to the issue when one is selected.
+
+| Target | Endpoints served from | Status |
+|---|---|---|
+| `dist-repo` | A separate public repository, through `raw.githubusercontent.com`. Intended to let the rulebook repository stay private on any plan. | Planned, [rulebook-engine#55](https://github.com/ALCops/rulebook-engine/issues/55) |
+| `azure-blob` | Azure Blob Storage, after an OIDC login from the workflow. | Planned, [rulebook-engine#56](https://github.com/ALCops/rulebook-engine/issues/56) |
+| `gist` | A GitHub gist. Needs a decision on the URL scheme first, because a gist has no folders. | Planned, [rulebook-engine#57](https://github.com/ALCops/rulebook-engine/issues/57) |
