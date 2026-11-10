@@ -1,5 +1,20 @@
 {
   "name": "Rulebook Developer / default",
   "description": "Level developer, stage default, twins both. Generated from base/developer.ruleset.json plus overrides.json and quarantine.default.json; do not edit. Ids at their analyzer default are not listed.",
-  "rules": []
+  "rules": [
+    { "id": "AL0432", "action": "Error" },
+    { "id": "AL0606", "action": "Error" },
+    { "id": "AL0667", "action": "Error" },
+    { "id": "AA0214", "action": "None" },
+    { "id": "AA0215", "action": "None" },
+    { "id": "AA0247", "action": "None" },
+    { "id": "AA0248", "action": "None" },
+    { "id": "AA0470", "action": "None" },
+    { "id": "AW0011", "action": "None" },
+    { "id": "AS0053", "action": "None" },
+    { "id": "AS0055", "action": "None" },
+    { "id": "AS0073", "action": "Error" },
+    { "id": "AS0075", "action": "Error" },
+    { "id": "AS0076", "action": "Error" }
+  ]
 }
