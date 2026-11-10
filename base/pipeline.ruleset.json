@@ -1,0 +1,6 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ALCops/rulebook-engine/v1/schemas/ruleset.delta.schema.json",
+  "name": "Rulebook Pipeline",
+  "description": "Level pipeline, root. Analyzer defaults: every diagnostic reports as its analyzer enables it. Add changes here or with a Change Rule override; justify each one.",
+  "rules": []
+}
