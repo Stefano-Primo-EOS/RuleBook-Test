@@ -1,4 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/ALCops/rulebook-engine/v1/schemas/rulebook-overrides.schema.json",
-  "rules": []
+  "rules": [
+    { "id": "AW0011", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "PromotedOnly: ignore" }
+  ]
 }
