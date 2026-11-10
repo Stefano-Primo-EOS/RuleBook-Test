@@ -1,6 +1,33 @@
 {
   "$schema": "https://raw.githubusercontent.com/ALCops/rulebook-engine/v1/schemas/rulebook-overrides.schema.json",
   "rules": [
-    { "id": "AW0011", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "PromotedOnly: ignore" }
+    { "id": "AW0011", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "PromotedOnly: ignore" },
+    { "id": "AA0470", "action": "None", "levels": ["developer"], "stages": ["default"], "justification": "Explain placeholders in labels: ignore" },
+    { "id": "AA0470", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "Explain placeholders in labels: ignore" },
+    { "id": "AA0214", "action": "None", "levels": ["developer"], "stages": ["default"], "justification": "The record xxx should be modified before saving to the database." },
+    { "id": "AA0214", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "The record xxx should be modified before saving to the database." },
+    { "id": "AA0215", "action": "None", "levels": ["developer"], "stages": ["default"], "justification": "File name incorrect." },
+    { "id": "AA0215", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "File name incorrect." },
+    { "id": "AA0247", "action": "None", "levels": ["developer"], "stages": ["default"], "justification": "No namespaces" },
+    { "id": "AA0247", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "No namespaces" },
+    { "id": "AA0248", "action": "None", "levels": ["developer"], "stages": ["default"], "justification": "use 'this' qualifier" },
+    { "id": "AA0248", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "use 'this' qualifier" },
+    { "id": "AL0432", "action": "Error", "levels": ["developer"], "stages": ["default"], "justification": "Err: Method 'xxxx' is marked for removal. Reason: Replaced by CreateReservEntryFor" },
+    { "id": "AL0432", "action": "Error", "levels": ["pipeline"], "stages": ["default"], "justification": "Err: Method 'xxxx' is marked for removal. Reason: Replaced by CreateReservEntryFor" },
+    { "id": "AL0606", "action": "Error", "levels": ["developer"], "stages": ["default"], "justification": "Err: The 'with' statement is deprecated and will be removed for cloud development in a future release. This warning will become an error in a future release." },
+    { "id": "AL0606", "action": "Error", "levels": ["pipeline"], "stages": ["default"], "justification": "Err: The 'with' statement is deprecated and will be removed for cloud development in a future release. This warning will become an error in a future release." },
+    { "id": "AL0667", "action": "Error", "levels": ["developer"], "stages": ["default"], "justification": "Err: 'PageNo' is being deprecated in the versions: '1.0' or greater. This warning will become an error in a future release." },
+    { "id": "AL0667", "action": "Error", "levels": ["pipeline"], "stages": ["default"], "justification": "Err: 'PageNo' is being deprecated in the versions: '1.0' or greater. This warning will become an error in a future release." },
+    { "id": "AS0053", "action": "None", "levels": ["developer"], "stages": ["default"], "justification": "The compilation target is set to 'OnPrem', but it must be set to 'Cloud' or 'Extension'." },
+    { "id": "AS0053", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "The compilation target is set to 'OnPrem', but it must be set to 'Cloud' or 'Extension'." },
+    { "id": "AS0055", "action": "None", "levels": ["developer"], "stages": ["default"], "justification": "List of localizations missing in AppSourceCop." },
+    { "id": "AS0055", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "List of localizations missing in AppSourceCop." },
+    { "id": "AS0073", "action": "Error", "levels": ["developer"], "stages": ["default"], "justification": "Obsolete Tag must be set." },
+    { "id": "AS0073", "action": "Error", "levels": ["pipeline"], "stages": ["default"], "justification": "Obsolete Tag must be set." },
+    { "id": "AS0075", "action": "Error", "levels": ["developer"], "stages": ["default"], "justification": "Obsolete Reason must be set." },
+    { "id": "AS0075", "action": "Error", "levels": ["pipeline"], "stages": ["default"], "justification": "Obsolete Reason must be set." },
+    { "id": "AS0076", "action": "Error", "levels": ["developer"], "stages": ["default"], "justification": "Obsolete Tag must have a specific format." },
+    { "id": "AS0076", "action": "Error", "levels": ["pipeline"], "stages": ["default"], "justification": "Obsolete Tag must have a specific format." },
+    { "id": "AW0011", "action": "None", "levels": ["developer"], "stages": ["default"], "justification": "PromotedOnly: ignore" }
   ]
 }
