@@ -1,6 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/ALCops/rulebook-engine/v1/schemas/rulebook-overrides.schema.json",
   "rules": [
+    { "id": "AW0011", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "PromotedOnly: ignore" },
     { "id": "AA0470", "action": "None", "levels": ["developer"], "stages": ["default"], "justification": "Explain placeholders in labels: ignore" },
     { "id": "AA0470", "action": "None", "levels": ["pipeline"], "stages": ["default"], "justification": "Explain placeholders in labels: ignore" },
     { "id": "AA0214", "action": "None", "levels": ["developer"], "stages": ["default"], "justification": "The record xxx should be modified before saving to the database." },
