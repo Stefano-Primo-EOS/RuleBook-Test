@@ -24,10 +24,8 @@ on:
         default: '*'
         options:
           - '*'
-          - essential
-          - recommended
-          - strict
-          - complete
+          - developer
+          - pipeline
       stages:
         description: 'Stage slug, or * for every stage. The list follows the settings after the next update.'
         type: choice
@@ -35,8 +33,6 @@ on:
         options:
           - '*'
           - default
-          - ci
-          - vnext
       justification:
         description: 'Why the rule changes (optional); written into the override entry. Empty keeps the existing justification; ignored for Remove.'
         type: string

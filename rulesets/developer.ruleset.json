@@ -1,0 +1,5 @@
+{
+  "name": "Rulebook Developer / default",
+  "description": "Level developer, stage default, twins both. Generated from base/developer.ruleset.json plus overrides.json and quarantine.default.json; do not edit. Ids at their analyzer default are not listed.",
+  "rules": []
+}
