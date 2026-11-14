@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ALCops/rulebook-engine/v1/schemas/rulebook-scan-state.schema.json",
+  "version": 1,
+  "packages": {
+    "microsoft.dynamics.businesscentral.development.tools": {
+      "stable": { "version": "18.1.43.24897", "scannedAt": "2026-11-14T11:35:39Z" },
+      "prerelease": { "version": "30.0.44.47290-beta", "scannedAt": "2026-11-14T11:35:39Z" }
+    },
+    "alcops.analyzers": {
+      "stable": { "version": "1.3.2", "scannedAt": "2026-11-14T11:35:39Z" },
+      "prerelease": { "version": "1.4.0-beta.1", "scannedAt": "2026-11-14T11:35:39Z" }
+    }
+  }
+}
