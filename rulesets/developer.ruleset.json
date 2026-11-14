@@ -15,6 +15,11 @@
     { "id": "AS0055", "action": "None" },
     { "id": "AS0073", "action": "Error" },
     { "id": "AS0075", "action": "Error" },
-    { "id": "AS0076", "action": "Error" }
+    { "id": "AS0076", "action": "Error" },
+    { "id": "PC0039", "action": "None" },
+    { "id": "PC0040", "action": "None" },
+    { "id": "AC0035", "action": "None" },
+    { "id": "DC0011", "action": "None" },
+    { "id": "FC0008", "action": "None" }
   ]
 }
